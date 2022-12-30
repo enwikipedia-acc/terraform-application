@@ -1,5 +1,5 @@
 locals {
-  blue_resource_prefix = "${var.resource_prefix}-appserver-b"
+  blue_resource_prefix  = "${var.resource_prefix}-appserver-b"
   green_resource_prefix = "${var.resource_prefix}-appserver-g"
 }
 
@@ -14,11 +14,31 @@ module "bluegreen" {
 }
 
 module "application-blue" {
-  source  = "app.terraform.io/enwikipedia-acc/waca-application/openstack"
-  version = "0.0.0"
+  source = "github.com/enwikipedia-acc/terraform-openstack-waca-application"
+  # version = "0.0.0"
+  count = module.bluegreen.blue_count
+
+  dns_name        = module.bluegreen.blue_dns_name
+  resource_prefix = local.blue_resource_prefix
+  environment     = "blue"
+  instance_type   = data.openstack_compute_flavor_v2.small.id
+  network         = data.openstack_networking_network_v2.network.id
+  dns_zone_id     = data.openstack_dns_zone_v2.rootzone.id
+  image_name      = "debian-11.0-bullseye"
+
 }
 
 module "application-green" {
-  source  = "app.terraform.io/enwikipedia-acc/waca-application/openstack"
-  version = "0.0.0"
+  source = "github.com/enwikipedia-acc/terraform-openstack-waca-application"
+  # version = "0.0.0"
+  count = module.bluegreen.green_count
+
+  dns_name        = module.bluegreen.green_dns_name
+  resource_prefix = local.green_resource_prefix
+  environment     = "green"
+  instance_type   = data.openstack_compute_flavor_v2.small.id
+  network         = data.openstack_networking_network_v2.network.id
+  dns_zone_id     = data.openstack_dns_zone_v2.rootzone.id
+  image_name      = "debian-11.0-bullseye"
+
 }
