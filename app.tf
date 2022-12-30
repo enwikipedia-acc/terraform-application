@@ -26,6 +26,11 @@ module "application-blue" {
   dns_zone_id     = data.openstack_dns_zone_v2.rootzone.id
   image_name      = "debian-11.0-bullseye"
 
+  security_groups = [
+    data.openstack_networking_secgroup_v2.default.name,
+    openstack_networking_secgroup_v2.app.name,
+    openstack_networking_secgroup_v2.app_target.name,
+  ]
 }
 
 module "application-green" {
@@ -41,4 +46,9 @@ module "application-green" {
   dns_zone_id     = data.openstack_dns_zone_v2.rootzone.id
   image_name      = "debian-11.0-bullseye"
 
+  security_groups = [
+    data.openstack_networking_secgroup_v2.default.name,
+    openstack_networking_secgroup_v2.app.name,
+    openstack_networking_secgroup_v2.app_target.name,
+  ]
 }
