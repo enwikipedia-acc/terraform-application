@@ -29,7 +29,6 @@ module "application-blue" {
   security_groups = [
     data.openstack_networking_secgroup_v2.default.name,
     openstack_networking_secgroup_v2.app.name,
-    openstack_networking_secgroup_v2.app_target.name,
   ]
 }
 
@@ -49,6 +48,5 @@ module "application-green" {
   security_groups = [
     data.openstack_networking_secgroup_v2.default.name,
     openstack_networking_secgroup_v2.app.name,
-    openstack_networking_secgroup_v2.app_target.name,
   ]
 }
