@@ -29,3 +29,14 @@ variable "staging_instance" {
   type        = string
   description = "The instance of the application running as a staging environment"
 }
+
+# Proxies
+variable "proxy_domain" {
+  type    = string
+  default = "wmcloud.org"
+}
+
+variable "proxy_suffix" {
+  default = ""
+  type    = string
+}
