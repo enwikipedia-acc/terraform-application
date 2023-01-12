@@ -7,7 +7,7 @@ terraform {
 
     cloudvps = {
       source  = "terraform.wmcloud.org/registry/cloudvps"
-      version = "~> 0.1.2"
+      version = "~> 0.1.3"
     }
   }
 

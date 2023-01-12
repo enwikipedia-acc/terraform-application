@@ -24,10 +24,10 @@ provider "registry.terraform.io/terraform-provider-openstack/openstack" {
 }
 
 provider "terraform.wmcloud.org/registry/cloudvps" {
-  version     = "0.1.2"
-  constraints = "~> 0.1.2"
+  version     = "0.1.3"
+  constraints = "~> 0.1.2, ~> 0.1.3"
   hashes = [
-    "h1:tGwwuKVASXmT0MnUWuXWKsHVafeZUbuhsXEn5TyDTRM=",
-    "zh:e4892ebc9c1c4987e509153b24616746f5d82017a6bad333a03f5164fe7503eb",
+    "h1:hmdrfA9YR8lLxjhWrFNVgpx8iHaKFirFqIKDPdIZc2k=",
+    "zh:c907117d4183bfa4a0cd7ec959249ddcbd6ee29801148fd17a32f5983d20d421",
   ]
 }
