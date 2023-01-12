@@ -40,3 +40,9 @@ variable "proxy_suffix" {
   default = ""
   type    = string
 }
+
+# DNS zone
+variable "dns_zone" {
+  type    = string
+  default = "svc.account-creation-assistance.eqiad1.wikimedia.cloud."
+}
