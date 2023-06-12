@@ -18,11 +18,14 @@ data "openstack_images_image_v2" "legacy_image" {
 }
 
 resource "openstack_compute_instance_v2" "legacy_db7" {
-  name            = "accounts-db7"
+  name            = "${var.resource_prefix}-db7"
   image_id        = data.openstack_images_image_v2.legacy_image.id
   flavor_id       = data.openstack_compute_flavor_v2.small.id
   user_data       = null
-  security_groups = []
+  security_groups = [
+    openstack_networking_secgroup_v2.default.name,
+    openstack_networking_secgroup_v2.db.name,
+  ]
 
   metadata = {
     terraform   = "Yes"
@@ -38,4 +41,16 @@ resource "openstack_compute_instance_v2" "legacy_db7" {
       image_id
     ]
   }
+}
+
+resource "openstack_blockstorage_volume_v3" "legacy_db7" {
+  name        = "${var.resource_prefix}-db7"
+  description = "Application database; managed by Terraform"
+  size        = 5
+}
+
+resource "openstack_compute_volume_attach_v2" "legacy_db7" {
+  instance_id = openstack_compute_instance_v2.legacy_db7.id
+  volume_id   = openstack_blockstorage_volume_v3.legacy_db7.id
+  device      = "/dev/sdb"
 }
