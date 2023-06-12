@@ -11,3 +11,31 @@ resource "openstack_dns_recordset_v2" "legacy_prod_db" {
   records = [data.openstack_compute_instance_v2.accounts-db6.access_ip_v4]
   ttl     = 180
 }
+
+data "openstack_images_image_v2" "legacy_image" {
+  most_recent = true
+  name        = "debian-12.0-bookworm"
+}
+
+resource "openstack_compute_instance_v2" "legacy_db7" {
+  name            = "accounts-db7"
+  image_id        = data.openstack_images_image_v2.legacy_image.id
+  flavor_id       = data.openstack_compute_flavor_v2.small.id
+  user_data       = null
+  security_groups = []
+
+  metadata = {
+    terraform   = "Yes"
+    environment = "Legacy"
+  }
+
+  network {
+    uuid = data.openstack_networking_network_v2.network.id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      image_id
+    ]
+  }
+}
