@@ -54,3 +54,15 @@ resource "openstack_compute_volume_attach_v2" "legacy_db7" {
   volume_id   = openstack_blockstorage_volume_v3.legacy_db7.id
   device      = "/dev/sdb"
 }
+
+resource "openstack_blockstorage_volume_v3" "legacy_db7_backup" {
+  name        = "${var.resource_prefix}-db7-backup"
+  description = "Application database; managed by Terraform"
+  size        = 2
+}
+
+resource "openstack_compute_volume_attach_v2" "legacy_db7_backup" {
+  instance_id = openstack_compute_instance_v2.legacy_db7.id
+  volume_id   = openstack_blockstorage_volume_v3.legacy_db7_backup.id
+  device      = "/dev/sdc"
+}
