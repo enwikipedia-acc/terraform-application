@@ -23,8 +23,8 @@ terraform {
 }
 
 provider "openstack" {
-  tenant_name                   = var.project
   auth_url                      = "https://openstack.eqiad1.wikimediacloud.org:25000/v3"
+  tenant_name                   = var.project
   application_credential_id     = var.application_credential_id
   application_credential_secret = var.application_credential_secret
 }
