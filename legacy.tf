@@ -9,7 +9,7 @@ resource "openstack_dns_recordset_v2" "legacy_prod_db" {
   zone_id = data.openstack_dns_zone_v2.rootzone.id
   type    = "A"
   records = [openstack_compute_instance_v2.legacy_db7.access_ip_v4]
-  ttl     = 15
+  ttl     = 900
 }
 
 data "openstack_images_image_v2" "legacy_image" {
