@@ -1,46 +1,5 @@
 # This file contains a bridge to the legacy non-managed infrastructure
 
-resource "openstack_compute_instance_v2" "legacy_db6" {
-  name            = "${var.resource_prefix}-db6"
-  image_id        = data.openstack_images_image_v2.legacy_image.id
-  flavor_id       = data.openstack_compute_flavor_v2.small.id
-  user_data       = null
-  power_state     = "shutoff"
-
-  security_groups = [
-    openstack_networking_secgroup_v2.default.name,
-    openstack_networking_secgroup_v2.db.name,
-    "database",
-    "default"
-  ]
-
-  metadata = {
-    terraform   = "Yes"
-    environment = "Legacy"
-  }
-
-  network {
-    uuid = data.openstack_networking_network_v2.network.id
-  }
-
-  lifecycle {
-    ignore_changes = [
-      image_id
-    ]
-  }
-}
-
-resource "openstack_blockstorage_volume_v3" "legacy_db6" {
-  name        = "app-db"
-  size        = 5
-}
-
-resource "openstack_blockstorage_volume_v3" "legacy_db6_backup" {
-  name        = "app-dbbackup"
-  size        = 2
-}
-
-
 resource "openstack_dns_recordset_v2" "legacy_prod_db" {
   name    = "db-legacy.${data.openstack_dns_zone_v2.rootzone.name}"
   zone_id = data.openstack_dns_zone_v2.rootzone.id
