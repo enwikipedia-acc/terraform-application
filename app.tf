@@ -4,8 +4,7 @@ locals {
 }
 
 module "bluegreen" {
-  source  = "app.terraform.io/enwikipedia-acc/bluegreen/openstack"
-  version = "0.2.0"
+  source  = "github.com/enwikipedia-acc/terraform-openstack-bluegreen?ref=0.2.0"
 
   blue_dns_name       = "${local.blue_resource_prefix}.${data.openstack_dns_zone_v2.rootzone.name}"
   green_dns_name      = "${local.green_resource_prefix}.${data.openstack_dns_zone_v2.rootzone.name}"
@@ -15,7 +14,7 @@ module "bluegreen" {
 
 module "application-blue" {
   source = "github.com/enwikipedia-acc/terraform-openstack-waca-application"
-  # version = "0.0.0"
+
   count = module.bluegreen.blue_count
 
   dns_name        = module.bluegreen.blue_dns_name
@@ -34,7 +33,7 @@ module "application-blue" {
 
 module "application-green" {
   source = "github.com/enwikipedia-acc/terraform-openstack-waca-application"
-  # version = "0.0.0"
+
   count = module.bluegreen.green_count
 
   dns_name        = module.bluegreen.green_dns_name
