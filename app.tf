@@ -13,7 +13,7 @@ module "bluegreen" {
 }
 
 module "application-blue" {
-  source = "github.com/enwikipedia-acc/terraform-openstack-waca-application"
+  source = "github.com/enwikipedia-acc/terraform-openstack-waca-application?ref=0.1.0"
 
   count = module.bluegreen.blue_count
 
