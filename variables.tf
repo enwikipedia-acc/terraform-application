@@ -25,11 +25,6 @@ variable "proxy_domain" {
   default = "wmcloud.org"
 }
 
-variable "proxy_suffix" {
-  default = ""
-  type    = string
-}
-
 # DNS zone
 variable "dns_zone" {
   type    = string

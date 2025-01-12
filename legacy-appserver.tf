@@ -8,12 +8,6 @@ resource "openstack_dns_recordset_v2" "legacy_prod_app6" {
   ttl     = 900
 }
 
-
-import {
-  id = "9d7288ae-ad02-40a6-8976-495d63c040a0"
-  to = openstack_compute_instance_v2.legacy_app6
-}
-
 resource "openstack_compute_instance_v2" "legacy_app6" {
   name            = "${var.resource_prefix}-appserver6"
   image_id        = data.openstack_images_image_v2.legacy_image.id
@@ -43,20 +37,10 @@ resource "openstack_compute_instance_v2" "legacy_app6" {
   }
 }
 
-import {
-  id = "0bdf4b46-49a4-4eb4-8966-7eb6d2fdec90"
-  to = openstack_blockstorage_volume_v3.legacy_app6
-}
-
 resource "openstack_blockstorage_volume_v3" "legacy_app6" {
   name        = "app-www"
   # description = "Application files; managed by Terraform"
   size        = 5
-}
-
-import {
-  id = "9d7288ae-ad02-40a6-8976-495d63c040a0/0bdf4b46-49a4-4eb4-8966-7eb6d2fdec90"
-  to = openstack_compute_volume_attach_v2.legacy_app6
 }
 
 resource "openstack_compute_volume_attach_v2" "legacy_app6" {
@@ -64,7 +48,6 @@ resource "openstack_compute_volume_attach_v2" "legacy_app6" {
   volume_id   = openstack_blockstorage_volume_v3.legacy_app6.id
   device      = "/dev/sdb"
 }
-
 
 data "openstack_networking_secgroup_v2" "legacy_web" {
   name = "web"

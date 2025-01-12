@@ -15,19 +15,18 @@ resource "openstack_dns_recordset_v2" "prod_db" {
 }
 
 locals {
-  proxy_hostname         = "${var.resource_prefix}${var.proxy_suffix}"
-  staging_proxy_hostname = "${local.proxy_hostname}-staging"
+  proxy_hostname         = var.resource_prefix
 }
 
 resource "cloudvps_web_proxy" "application_proxy" {
   hostname = local.proxy_hostname
   domain   = var.proxy_domain
-  backends = ["http://app-prod.${trimsuffix(data.openstack_dns_zone_v2.rootzone.name, ".")}:80"]
+  backends = ["http://${local.production_app_instance_ip4}:80"]
 }
 
 resource "cloudvps_web_proxy" "application_proxy_dev" {
   hostname = "${local.proxy_hostname}-dev"
   domain   = var.proxy_domain
-  backends = ["http://app-prod.${trimsuffix(data.openstack_dns_zone_v2.rootzone.name, ".")}:80"]
+  backends = ["http://${local.production_app_instance_ip4}:80"]
 }
 
