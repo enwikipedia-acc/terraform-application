@@ -19,17 +19,6 @@ variable "resource_prefix" {
   default = "accounts"
 }
 
-# blue/green deployments
-variable "live_instance" {
-  type        = string
-  description = "The currently-active instance of the application"
-}
-
-variable "staging_instance" {
-  type        = string
-  description = "The instance of the application running as a staging environment"
-}
-
 # Proxies
 variable "proxy_domain" {
   type    = string
