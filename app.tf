@@ -1,7 +1,7 @@
 module "application-blue" {
   source = "github.com/enwikipedia-acc/terraform-openstack-waca-application?ref=0.1.0"
 
-  count = 1
+  count = 0
 
   dns_name        = "${var.resource_prefix}-appserver-b.${data.openstack_dns_zone_v2.rootzone.name}"
   resource_prefix = "${var.resource_prefix}-appserver-b"
