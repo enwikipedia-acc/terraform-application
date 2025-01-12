@@ -3,7 +3,6 @@ name: Run plan for PR
 on:
   pull_request:
     branches:
-      - master
       - main
 
 permissions:
