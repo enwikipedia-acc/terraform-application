@@ -19,11 +19,6 @@ resource "openstack_networking_secgroup_rule_v2" "default_egress" {
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
-moved {
-  from = openstack_networking_secgroup_rule_v2.default-egress
-  to = openstack_networking_secgroup_rule_v2.default_egress
-}
-
 resource "openstack_networking_secgroup_rule_v2" "default_v4_icmp" {
   direction        = "ingress"
   ethertype        = "IPv4"
@@ -32,11 +27,6 @@ resource "openstack_networking_secgroup_rule_v2" "default_v4_icmp" {
   description      = "WMCS ICMP"
 
   security_group_id = openstack_networking_secgroup_v2.default.id
-}
-
-import {
-  id = "279ef549-ceb8-407f-a892-c758eaa67775"
-  to = openstack_networking_secgroup_rule_v2.default_v4_icmp
 }
 
 resource "openstack_networking_secgroup_rule_v2" "default_v6_icmp" {
@@ -48,12 +38,6 @@ resource "openstack_networking_secgroup_rule_v2" "default_v6_icmp" {
 
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
-
-import {
-  id = "8c219a4a-2533-4dd9-9e01-7b5f6b800813"
-  to = openstack_networking_secgroup_rule_v2.default_v6_icmp
-}
-
 resource "openstack_networking_secgroup_rule_v2" "default_ssh" {
   for_each = local.wmcs_internal_ranges
 
@@ -68,15 +52,6 @@ resource "openstack_networking_secgroup_rule_v2" "default_ssh" {
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
-import {
-  id = "ad317ae1-d4ee-4f76-bbfe-0f788f8186c4"
-  to = openstack_networking_secgroup_rule_v2.default_ssh["IPv4"]
-}
-import {
-  id = "a82fe99f-52ab-4ab0-964e-858e14cc9a42"
-  to = openstack_networking_secgroup_rule_v2.default_ssh["IPv6"]
-}
-
 resource "openstack_networking_secgroup_rule_v2" "default_nagios" {
   for_each = local.wmcs_internal_ranges
 
@@ -89,15 +64,6 @@ resource "openstack_networking_secgroup_rule_v2" "default_nagios" {
   description      = "WMCS Nagios monitoring"
 
   security_group_id = openstack_networking_secgroup_v2.default.id
-}
-
-import {
-  id = "17d60d1f-94c2-4e47-8775-47971a6bee92"
-  to = openstack_networking_secgroup_rule_v2.default_nagios["IPv4"]
-}
-import {
-  id = "1d24946d-c231-4294-b26d-b9a2740ca120"
-  to = openstack_networking_secgroup_rule_v2.default_nagios["IPv6"]
 }
 
 resource "openstack_networking_secgroup_rule_v2" "default_prometheus" {

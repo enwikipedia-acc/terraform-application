@@ -47,12 +47,3 @@ resource "openstack_networking_secgroup_rule_v2" "app_http" {
 
   security_group_id = openstack_networking_secgroup_v2.app.id
 }
-
-import {
-  id = "06cae751-c16d-4f77-8224-9f53a5511597"
-  to = openstack_networking_secgroup_rule_v2.app_http["IPv4"]
-}
-import {
-  id = "ebcf8306-dbc0-474c-8f2b-d6243e51ee7d"
-  to = openstack_networking_secgroup_rule_v2.app_http["IPv6"]
-}
