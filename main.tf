@@ -2,12 +2,12 @@ terraform {
   required_providers {
     openstack = {
       source  = "terraform-provider-openstack/openstack"
-      version = "~> 3.0.0"
+      version = "~> 3.0"
     }
 
     cloudvps = {
       source  = "terraform.wmcloud.org/registry/cloudvps"
-      version = "~> 0.2.0"
+      version = "~> 0.3"
     }
   }
 
@@ -20,15 +20,9 @@ terraform {
 }
 
 provider "openstack" {
-  auth_url                      = "https://openstack.eqiad1.wikimediacloud.org:25000/v3"
-  tenant_name                   = var.project
-  application_credential_id     = var.application_credential_id
-  application_credential_secret = var.application_credential_secret
+  tenant_name = var.project
 }
 
 provider "cloudvps" {
-  os_auth_url                      = "https://openstack.eqiad1.wikimediacloud.org:25000/v3"
-  os_project_id                    = var.project
-  os_application_credential_id     = var.application_credential_id
-  os_application_credential_secret = var.application_credential_secret
+  os_project_id = var.project
 }

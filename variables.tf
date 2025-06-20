@@ -1,13 +1,3 @@
-# Authentication
-variable "application_credential_id" {
-  type = string
-}
-
-variable "application_credential_secret" {
-  type      = string
-  sensitive = true
-}
-
 # Project configuration
 variable "project" {
   type    = string
