@@ -6,6 +6,7 @@ data "openstack_compute_flavor_v2" "small" {
 
 data "openstack_networking_network_v2" "network" {
   external = false
+  name     = "VLAN/legacy"
 }
 
 data "openstack_networking_secgroup_v2" "default" {

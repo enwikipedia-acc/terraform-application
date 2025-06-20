@@ -32,7 +32,8 @@ resource "openstack_compute_instance_v2" "legacy_app6" {
 
   lifecycle {
     ignore_changes = [
-      image_id
+      image_id,
+      network
     ]
   }
 }
