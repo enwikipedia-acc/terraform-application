@@ -34,26 +34,25 @@ resource "openstack_networking_secgroup_rule_v2" "db-v4-mysql" {
   security_group_id = openstack_networking_secgroup_v2.db.id
 }
 
-resource "openstack_networking_secgroup_rule_v2" "app-v4-http" {
+resource "openstack_networking_secgroup_rule_v2" "app_http" {
+  for_each = local.wmcs_internal_ranges
+
   direction        = "ingress"
-  ethertype        = "IPv4"
+  ethertype        = each.key
   protocol         = "tcp"
   port_range_min   = 80
   port_range_max   = 80
-  remote_ip_prefix = "172.16.0.0/17"
+  remote_ip_prefix = each.value
   description      = "HTTP inbound from within WMCS"
 
   security_group_id = openstack_networking_secgroup_v2.app.id
 }
 
-resource "openstack_networking_secgroup_rule_v2" "app-v6-http" {
-  direction        = "ingress"
-  ethertype        = "IPv6"
-  protocol         = "tcp"
-  port_range_min   = 80
-  port_range_max   = 80
-  remote_ip_prefix = "2a02:ec80:a000::/56"
-  description      = "HTTP inbound from within WMCS"
-
-  security_group_id = openstack_networking_secgroup_v2.app.id
+import {
+  id = "06cae751-c16d-4f77-8224-9f53a5511597"
+  to = openstack_networking_secgroup_rule_v2.app_http["IPv4"]
+}
+import {
+  id = "ebcf8306-dbc0-474c-8f2b-d6243e51ee7d"
+  to = openstack_networking_secgroup_rule_v2.app_http["IPv6"]
 }

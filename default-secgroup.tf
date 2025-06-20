@@ -1,10 +1,14 @@
+locals {
+  wmcs_internal_ranges = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
+}
+
 resource "openstack_networking_secgroup_v2" "default" {
   name                 = "${var.resource_prefix}-default"
   description          = "Managed by Terraform; locally-managed default group"
   delete_default_rules = true
 }
 
-resource "openstack_networking_secgroup_rule_v2" "default-egress" {
+resource "openstack_networking_secgroup_rule_v2" "default_egress" {
   for_each = { IPv4 = "0.0.0.0/0", IPv6 = "::/0" }
 
   direction        = "egress"
@@ -13,6 +17,11 @@ resource "openstack_networking_secgroup_rule_v2" "default-egress" {
   description      = "Outbound to internet"
 
   security_group_id = openstack_networking_secgroup_v2.default.id
+}
+
+moved {
+  from = openstack_networking_secgroup_rule_v2.default-egress
+  to = openstack_networking_secgroup_rule_v2.default_egress
 }
 
 resource "openstack_networking_secgroup_rule_v2" "default_v4_icmp" {
@@ -25,9 +34,9 @@ resource "openstack_networking_secgroup_rule_v2" "default_v4_icmp" {
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
-moved {
-  from = openstack_networking_secgroup_rule_v2.default-icmp
-  to   = openstack_networking_secgroup_rule_v2.default_v4_icmp
+import {
+  id = "279ef549-ceb8-407f-a892-c758eaa67775"
+  to = openstack_networking_secgroup_rule_v2.default_v4_icmp
 }
 
 resource "openstack_networking_secgroup_rule_v2" "default_v6_icmp" {
@@ -40,8 +49,13 @@ resource "openstack_networking_secgroup_rule_v2" "default_v6_icmp" {
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
+import {
+  id = "8c219a4a-2533-4dd9-9e01-7b5f6b800813"
+  to = openstack_networking_secgroup_rule_v2.default_v6_icmp
+}
+
 resource "openstack_networking_secgroup_rule_v2" "default_ssh" {
-  for_each = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
+  for_each = local.wmcs_internal_ranges
 
   direction        = "ingress"
   ethertype        = each.key
@@ -54,13 +68,17 @@ resource "openstack_networking_secgroup_rule_v2" "default_ssh" {
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
-moved {
-  from = openstack_networking_secgroup_rule_v2.default-ssh
-  to   = openstack_networking_secgroup_rule_v2.default_ssh["IPv4"]
+import {
+  id = "ad317ae1-d4ee-4f76-bbfe-0f788f8186c4"
+  to = openstack_networking_secgroup_rule_v2.default_ssh["IPv4"]
+}
+import {
+  id = "a82fe99f-52ab-4ab0-964e-858e14cc9a42"
+  to = openstack_networking_secgroup_rule_v2.default_ssh["IPv6"]
 }
 
 resource "openstack_networking_secgroup_rule_v2" "default_nagios" {
-  for_each = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
+  for_each = local.wmcs_internal_ranges
 
   direction        = "ingress"
   ethertype        = each.key
@@ -73,9 +91,13 @@ resource "openstack_networking_secgroup_rule_v2" "default_nagios" {
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
-moved {
-  from = openstack_networking_secgroup_rule_v2.default-nagios
-  to   = openstack_networking_secgroup_rule_v2.default_nagios["IPv4"]
+import {
+  id = "17d60d1f-94c2-4e47-8775-47971a6bee92"
+  to = openstack_networking_secgroup_rule_v2.default_nagios["IPv4"]
+}
+import {
+  id = "1d24946d-c231-4294-b26d-b9a2740ca120"
+  to = openstack_networking_secgroup_rule_v2.default_nagios["IPv6"]
 }
 
 resource "openstack_networking_secgroup_rule_v2" "default_prometheus" {
@@ -90,9 +112,4 @@ resource "openstack_networking_secgroup_rule_v2" "default_prometheus" {
   description      = "WMCS Prometheus monitoring"
 
   security_group_id = openstack_networking_secgroup_v2.default.id
-}
-
-moved {
-  from = openstack_networking_secgroup_rule_v2.default-prometheus
-  to   = openstack_networking_secgroup_rule_v2.default_prometheus
 }
