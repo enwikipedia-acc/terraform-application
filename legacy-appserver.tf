@@ -4,7 +4,7 @@ resource "openstack_dns_recordset_v2" "legacy_prod_app6" {
   name    = "app-legacy.${data.openstack_dns_zone_v2.rootzone.name}"
   zone_id = data.openstack_dns_zone_v2.rootzone.id
   type    = "A"
-  records = [openstack_compute_instance_v2.legacy_app6.access_ip_v4]
+  records = [openstack_compute_instance_v2.legacy_app7.access_ip_v4]
   ttl     = 900
 }
 
@@ -21,11 +21,6 @@ resource "openstack_compute_instance_v2" "legacy_app6" {
 
   ]
 
-  # metadata = {
-  #   terraform   = "Yes"
-  #   environment = "Legacy"
-  # }
-
   network {
     uuid = data.openstack_networking_network_v2.network.id
   }
@@ -40,7 +35,6 @@ resource "openstack_compute_instance_v2" "legacy_app6" {
 
 resource "openstack_blockstorage_volume_v3" "legacy_app6" {
   name        = "app-www"
-  # description = "Application files; managed by Terraform"
   size        = 5
 }
 
