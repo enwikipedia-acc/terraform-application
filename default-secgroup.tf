@@ -15,41 +15,70 @@ resource "openstack_networking_secgroup_rule_v2" "default-egress" {
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
-resource "openstack_networking_secgroup_rule_v2" "default-icmp" {
+resource "openstack_networking_secgroup_rule_v2" "default_v4_icmp" {
   direction        = "ingress"
   ethertype        = "IPv4"
   protocol         = "icmp"
-  remote_ip_prefix = "172.16.0.0/21"
+  remote_ip_prefix = "172.16.0.0/17"
   description      = "WMCS ICMP"
 
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
-resource "openstack_networking_secgroup_rule_v2" "default-ssh" {
+moved {
+  from = openstack_networking_secgroup_rule_v2.default-icmp
+  to   = openstack_networking_secgroup_rule_v2.default_v4_icmp
+}
+
+resource "openstack_networking_secgroup_rule_v2" "default_v6_icmp" {
   direction        = "ingress"
-  ethertype        = "IPv4"
+  ethertype        = "IPv6"
+  protocol         = "ipv6-icmp"
+  remote_ip_prefix = "2a02:ec80:a000::/56"
+  description      = "WMCS ICMP"
+
+  security_group_id = openstack_networking_secgroup_v2.default.id
+}
+
+resource "openstack_networking_secgroup_rule_v2" "default_ssh" {
+  for_each = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
+
+  direction        = "ingress"
+  ethertype        = each.key
   protocol         = "tcp"
   port_range_min   = 22
   port_range_max   = 22
-  remote_ip_prefix = "172.16.0.0/21"
+  remote_ip_prefix = each.value
   description      = "WMCS SSH"
 
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
-resource "openstack_networking_secgroup_rule_v2" "default-nagios" {
+moved {
+  from = openstack_networking_secgroup_rule_v2.default-ssh
+  to   = openstack_networking_secgroup_rule_v2.default_ssh["IPv4"]
+}
+
+resource "openstack_networking_secgroup_rule_v2" "default_nagios" {
+  for_each = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
+
   direction        = "ingress"
-  ethertype        = "IPv4"
+  ethertype        = each.key
   protocol         = "tcp"
   port_range_min   = 5666
   port_range_max   = 5666
-  remote_ip_prefix = "172.16.0.0/21"
+  remote_ip_prefix = each.value
   description      = "WMCS Nagios monitoring"
 
   security_group_id = openstack_networking_secgroup_v2.default.id
 }
 
-resource "openstack_networking_secgroup_rule_v2" "default-prometheus" {
+moved {
+  from = openstack_networking_secgroup_rule_v2.default-nagios
+  to   = openstack_networking_secgroup_rule_v2.default_nagios["IPv4"]
+}
+
+resource "openstack_networking_secgroup_rule_v2" "default_prometheus" {
   for_each = toset(["172.16.6.65/32", "172.16.0.229/32"])
 
   direction        = "ingress"
@@ -61,4 +90,9 @@ resource "openstack_networking_secgroup_rule_v2" "default-prometheus" {
   description      = "WMCS Prometheus monitoring"
 
   security_group_id = openstack_networking_secgroup_v2.default.id
+}
+
+moved {
+  from = openstack_networking_secgroup_rule_v2.default-prometheus
+  to   = openstack_networking_secgroup_rule_v2.default_prometheus
 }
