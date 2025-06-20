@@ -40,9 +40,20 @@ resource "openstack_networking_secgroup_rule_v2" "app-v4-http" {
   protocol         = "tcp"
   port_range_min   = 80
   port_range_max   = 80
-  remote_ip_prefix = "172.16.0.0/21"
+  remote_ip_prefix = "172.16.0.0/17"
   description      = "HTTP inbound from within WMCS"
 
   security_group_id = openstack_networking_secgroup_v2.app.id
 }
 
+resource "openstack_networking_secgroup_rule_v2" "app-v6-http" {
+  direction        = "ingress"
+  ethertype        = "IPv6"
+  protocol         = "tcp"
+  port_range_min   = 80
+  port_range_max   = 80
+  remote_ip_prefix = "2a02:ec80:a000::/56"
+  description      = "HTTP inbound from within WMCS"
+
+  security_group_id = openstack_networking_secgroup_v2.app.id
+}
