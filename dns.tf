@@ -36,19 +36,8 @@ resource "cloudvps_web_proxy" "wmflabs_application_proxy" {
   backends = ["http://${local.production_app_instance_ip4}:80"]
 }
 
-import {
-  id = "accounts.wmflabs.org"
-  to = cloudvps_web_proxy.wmflabs_application_proxy
-}
-
 resource "cloudvps_web_proxy" "wmflabs_application_proxy_dev" {
   hostname = "${local.proxy_hostname}-dev"
   domain   = "wmflabs.org"
   backends = ["http://${local.production_app_instance_ip4}:80"]
 }
-
-import {
-  id = "accounts-dev.wmflabs.org"
-  to = cloudvps_web_proxy.wmflabs_application_proxy_dev
-}
-
