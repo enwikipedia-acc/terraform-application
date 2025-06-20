@@ -4,7 +4,7 @@ resource "openstack_dns_recordset_v2" "legacy_prod_db" {
   name    = "db-legacy.${data.openstack_dns_zone_v2.rootzone.name}"
   zone_id = data.openstack_dns_zone_v2.rootzone.id
   type    = "A"
-  records = [openstack_compute_instance_v2.legacy_db7.access_ip_v4]
+  records = [local.production_db_instance_ip4]
   ttl     = 900
 }
 
@@ -34,7 +34,8 @@ resource "openstack_compute_instance_v2" "legacy_db7" {
 
   lifecycle {
     ignore_changes = [
-      image_id
+      image_id,
+      network
     ]
   }
 }
