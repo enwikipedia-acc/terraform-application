@@ -1,11 +1,15 @@
 # This file contains a bridge to the legacy non-managed infrastructure
 
-resource "openstack_dns_recordset_v2" "legacy_prod_db" {
-  name    = "db-legacy.${data.openstack_dns_zone_v2.rootzone.name}"
-  zone_id = data.openstack_dns_zone_v2.rootzone.id
-  type    = "A"
-  records = [local.production_db_instance_ip4]
-  ttl     = 900
+module "dns_db_legacy" {
+  source = "./modules/dns"
+
+  access_ip_v4 = local.production_db_instance_ip4
+  name         = "db-legacy" 
+}
+
+moved {
+  from = openstack_dns_recordset_v2.legacy_prod_db
+  to   = module.dns_db_legacy.openstack_dns_recordset_v2.a
 }
 
 data "openstack_images_image_v2" "legacy_image" {
