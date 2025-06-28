@@ -26,7 +26,8 @@ resource "openstack_compute_instance_v2" "testinstance12" {
   user_data       = null
   security_groups = [
     openstack_networking_secgroup_v2.default.name,
-    openstack_networking_secgroup_v2.app.name
+    openstack_networking_secgroup_v2.app.name,
+    openstack_networking_secgroup_v2.testinstance.name,
   ]
 
   network {
@@ -54,4 +55,38 @@ module "dns_test12" {
   access_ip_v4 = openstack_compute_instance_v2.testinstance12.access_ip_v4
   access_ip_v6 = openstack_compute_instance_v2.testinstance12.access_ip_v6
   name         = "test12" 
+}
+
+resource "openstack_networking_secgroup_v2" "testinstance" {
+  name        = "${var.resource_prefix}-testinstance"
+  description = "Managed by Terraform"
+  delete_default_rules = true
+}
+
+resource "openstack_networking_secgroup_rule_v2" "udp_in" {
+  for_each = { IPv4 = "0.0.0.0/0", IPv6 = "::/0" }
+
+  direction        = "ingress"
+  ethertype        = each.key
+  protocol         = "udp"
+  port_range_min   = 123
+  port_range_max   = 123
+  remote_ip_prefix = each.value
+  description      = "NTP inbound"
+
+  security_group_id = openstack_networking_secgroup_v2.testinstance.id
+}
+
+resource "openstack_networking_secgroup_rule_v2" "udp_out" {
+  for_each = { IPv4 = "0.0.0.0/0", IPv6 = "::/0" }
+
+  direction        = "egress"
+  ethertype        = each.key
+  protocol         = "udp"
+  port_range_min   = 123
+  port_range_max   = 123
+  remote_ip_prefix = each.value
+  description      = "NTP outbound"
+
+  security_group_id = openstack_networking_secgroup_v2.testinstance.id
 }
