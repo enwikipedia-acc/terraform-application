@@ -9,6 +9,9 @@ resource "openstack_dns_recordset_v2" "legacy_prod_app6" {
 }
 
 resource "openstack_compute_instance_v2" "legacy_app6" {
+  # This instance has a volume attached to it, which is not managed by Terraform.
+  # Delete the volume attachmnt manually before destroying this instance.
+
   name            = "${var.resource_prefix}-appserver6"
   image_id        = data.openstack_images_image_v2.legacy_image.id
   flavor_id       = data.openstack_compute_flavor_v2.small.id
@@ -33,15 +36,12 @@ resource "openstack_compute_instance_v2" "legacy_app6" {
   }
 }
 
-resource "openstack_blockstorage_volume_v3" "legacy_app6" {
-  name        = "app-www"
-  size        = 5
+removed {
+  from = openstack_blockstorage_volume_v3.legacy_app6
 }
 
-resource "openstack_compute_volume_attach_v2" "legacy_app6" {
-  instance_id = openstack_compute_instance_v2.legacy_app6.id
-  volume_id   = openstack_blockstorage_volume_v3.legacy_app6.id
-  device      = "/dev/sdb"
+removed {
+  from = openstack_compute_volume_attach_v2.legacy_app6
 }
 
 data "openstack_networking_secgroup_v2" "legacy_web" {
