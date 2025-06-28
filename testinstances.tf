@@ -60,3 +60,12 @@ resource "openstack_compute_instance_v2" "testinstance12" {
     ]
   }
 }
+
+resource "cloudvps_puppet_prefix" "testinstances" {
+  name = "accounts-testinstance"
+
+  hiera = <<-EOT
+    profile::systemd::timesyncd::ntp_servers:
+      - ntp.ubuntu.com
+  EOT
+}
