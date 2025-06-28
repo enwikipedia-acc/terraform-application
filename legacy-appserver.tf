@@ -36,13 +36,6 @@ resource "openstack_compute_instance_v2" "legacy_app6" {
   }
 }
 
-removed {
-  from = openstack_blockstorage_volume_v3.legacy_app6
-}
-
-removed {
-  from = openstack_compute_volume_attach_v2.legacy_app6
-}
 
 data "openstack_networking_secgroup_v2" "legacy_web" {
   name = "web"
