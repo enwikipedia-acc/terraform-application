@@ -1,3 +1,13 @@
+# This file manges the default security group for all instances in the project.
+# It rougly corresponds to the default security group provided by the OpenStack dashboard.
+# To be specific, it *removes*:
+# - ICMP IPv4 from anywhere, limiting to just within the WMCS internal network
+# - Inbound SSH from 10.0.0.0/8
+# - Inbound Nagios monitoring from 10.0.0.0/8
+# - Inbound anything from the "default" security group
+# It also allows:
+# - ICMP IPv6 from WMCS internal network
+
 locals {
   wmcs_internal_ranges = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
 }
