@@ -7,11 +7,6 @@ module "dns_db_legacy" {
   name         = "db-legacy" 
 }
 
-moved {
-  from = openstack_dns_recordset_v2.legacy_prod_db
-  to   = module.dns_db_legacy.openstack_dns_recordset_v2.a
-}
-
 data "openstack_images_image_v2" "legacy_image" {
   most_recent = true
   name        = "debian-12.0-bookworm"

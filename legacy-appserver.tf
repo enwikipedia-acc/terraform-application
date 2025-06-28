@@ -7,11 +7,6 @@ module "dns_app_legacy" {
   name         = "app-legacy" 
 }
 
-moved {
-  from = openstack_dns_recordset_v2.legacy_prod_app6
-  to   = module.dns_app_legacy.openstack_dns_recordset_v2.a
-}
-
 resource "openstack_compute_instance_v2" "legacy_app6" {
   # This instance has a volume attached to it, which is not managed by Terraform.
   # Delete the volume attachmnt manually before destroying this instance.
