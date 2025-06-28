@@ -75,7 +75,7 @@ module "dns_test11_legacy" {
   source = "./modules/dns"
 
   access_ip_v4 = openstack_compute_instance_v2.testinstance11_legacy.access_ip_v4
-  access_ip_v6 = openstack_compute_instance_v2.testinstance11_legacy.access_ip_v6
+  # access_ip_v6 = openstack_compute_instance_v2.testinstance11_legacy.access_ip_v6
   name         = "test11-legacy" 
 }
 
