@@ -8,7 +8,7 @@ data "openstack_compute_flavor_v2" "small" {
 
 ######## Subnets ########
 
-data "openstack_networking_network_v2" "network" {
+data "openstack_networking_network_v2" "legacy" {
   external = false
   name     = "VLAN/legacy"
 }

@@ -28,7 +28,7 @@ resource "openstack_compute_instance_v2" "legacy_db7" {
   }
 
   network {
-    uuid = data.openstack_networking_network_v2.network.id
+    uuid = data.openstack_networking_network_v2.legacy.id
   }
 
   lifecycle {
